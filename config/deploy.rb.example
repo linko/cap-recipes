@@ -1,0 +1,55 @@
+require "bundler/capistrano"
+require 'sushi/ssh'
+require 'capistrano_colors'
+
+# multistage
+set :stages, %w(production staging)
+set :default_stage, "staging"
+require 'capistrano/ext/multistage'
+
+# whenever
+#set :whenever_command, "bundle exec whenever"
+#set :whenever_environment, defer { stage }
+#set :whenever_identifier, defer { "#{application}_#{stage}" }
+#require "whenever/capistrano"
+
+
+load "config/recipes/base"
+load "config/recipes/nginx"
+load "config/recipes/db"
+load "config/recipes/rbenv"
+load "config/recipes/assets" # turn off when deploy:cold
+#load "config/recipes/check"
+
+#load 'config/recipes/wordpress'
+
+
+server "0.0.0.0", :web, :app, :db, primary: true
+
+# custom
+set :domain, 'yourapp.domain'
+set :rails_server, 'unicorn'
+
+#standard
+set :user, "deployer"
+set :application, "yourapp"
+set :deploy_to, "/home/#{user}/apps/#{application}"
+
+set :deploy_via, :remote_cache
+set :use_sudo, false
+
+set :scm, "git"
+set :repository, "git@repository"
+set :branch, "develop"
+
+default_run_options[:pty] = true
+ssh_options[:forward_agent] = true
+
+if rails_server.eql?("unicorn")
+  load "config/recipes/unicorn"
+else
+  load "config/recipes/thin"
+end
+
+after 'deploy:update_code', 'deploy:migrate'
+after "deploy", "deploy:cleanup" # keep only the last 5 releases

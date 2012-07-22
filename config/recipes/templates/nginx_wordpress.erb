@@ -1,0 +1,34 @@
+# Upstream to abstract backend connection(s) for PHP.
+#upstream php {
+#  server unix:/tmp/php-fpm.sock;
+# server 127.0.0.1:9000;
+#}
+
+# Redirect everything to the main site.
+server {
+  listen 80;
+  server_name *.<%= application %>.handsome.is;
+  rewrite ^ http://<%= application %>.handsome.is$request_uri permanent;
+}
+
+server {
+  server_name <%= application %>.handsome.is;
+  root <%= deploy_to %>;
+
+  index           index.php index.html;
+
+  location ~* \.php$ {
+    if (!-f $request_filename) {
+      return 404;
+    }
+
+    fastcgi_pass 127.0.0.1:9000;
+    include      fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param SERVER_NAME $host;
+  }
+
+
+  include global/restrictions.conf;
+  include global/wordpress-ms-subdir.conf;
+}
