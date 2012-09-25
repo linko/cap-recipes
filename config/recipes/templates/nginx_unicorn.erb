@@ -1,10 +1,10 @@
 upstream unicorn {
-  server unix:/tmp/unicorn.<%= application %>.sock fail_timeout=0;
+  server unix:<%= "#{deploy_to}/shared/unicorn.sock" %> fail_timeout=0;
 }
 
 server {
   listen 80;
-  server_name <%= application %>.handsome.is;
+  server_name <%= domain %>;
   root <%= current_path %>/public;
 
   location ^~ /assets/ {
