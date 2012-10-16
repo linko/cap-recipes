@@ -13,15 +13,17 @@ require 'capistrano/ext/multistage'
 #set :whenever_identifier, defer { "#{application}_#{stage}" }
 #require "whenever/capistrano"
 
+set :recipes_dir, File.expand_path("/../cap-recipes", __FILE__)
 
-load "config/recipes/base"
-load "config/recipes/nginx"
-load "config/recipes/db"
-load "config/recipes/rbenv"
-load "config/recipes/assets" # turn off when deploy:cold
-#load "config/recipes/check"
 
-#load 'config/recipes/wordpress'
+load recipes_dir+"/config/recipes/base"
+load recipes_dir+"/config/recipes/nginx"
+load recipes_dir+"/config/recipes/db"
+load recipes_dir+"/config/recipes/rbenv"
+#load recipes_dir+"/config/recipes/assets" # turn off when deploy:cold
+#load recipes_dir+"config/recipes/check"
+
+#load recipes_dir+'config/recipes/wordpress'
 
 
 server "0.0.0.0", :web, :app, :db, primary: true
