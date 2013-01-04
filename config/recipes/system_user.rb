@@ -1,12 +1,14 @@
 set_default(:deployer_password) { Capistrano::CLI.password_prompt "UNIX password for user #{deploy_user}: " }
 set_default(:dont_create, "false") # flag
+set_default(:root_user, "root")
+set_default(:ssh_public_key, "/home/linko/.ssh/id_rsa.pub")
+set_default :deploy_user, user  # saves the content of user variable, so it can be restored later
 
 namespace :system_user do
 
   desc "Creates user for deployment #{user}"
   task :create_user do
-    close_sessions
-    set :deploy_user, user  # saves the content of user variable, so it can be restored later
+    #close_sessions
     set :user, root_user    # sets user to root for first login
 
     run "sed -n /#{deploy_user}/{p} /etc/passwd" do |channel, stream, data|
@@ -18,6 +20,7 @@ namespace :system_user do
     puts "Dont_create is #{dont_create}"
 
     if dont_create == "false"
+      run "groupadd admin"
       run "#{sudo} adduser #{deploy_user} --ingroup admin" do |channel, stream, data|
         channel.send_data("#{deployer_password}\n") if data =~ /UNIX password/
         # setting UNIX prompt data to default
@@ -26,7 +29,7 @@ namespace :system_user do
       puts "User #{deploy_user} created!"
     end
   end
-  #before "deploy:install", "system_user:create_user" # just reference: already set in base.rb
+  before "deploy:install", "system_user:create_user" # just reference: already set in base.rb
 
   desc "Adds ssh pubic keys for deployment user."
   task :copy_ssh_keys do
@@ -39,7 +42,7 @@ namespace :system_user do
       run "#{sudo} chgrp -R admin /home/#{deploy_user}/.ssh"
       puts "SSH keys added for #{deploy_user}!"
     end
-    close_sessions
+    #close_sessions
     set :user, deploy_user
   end
   after "system_user:create_user", "system_user:copy_ssh_keys"

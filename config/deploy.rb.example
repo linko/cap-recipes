@@ -17,8 +17,11 @@ set :recipes_dir, File.expand_path("/../cap-recipes", __FILE__)
 
 
 load recipes_dir+"/config/recipes/base"
+load recipes_dir+"/config/recipes/system_user"
 load recipes_dir+"/config/recipes/nginx"
-load recipes_dir+"/config/recipes/db"
+load recipes_dir+"/config/recipes/redis"
+load recipes_dir+"/config/recipes/mysql"
+load recipes_dir+"/config/recipes/mongodb"
 load recipes_dir+"/config/recipes/postgres"
 load recipes_dir+"/config/recipes/rbenv"
 #load recipes_dir+"/config/recipes/assets" # turn off when deploy:cold
@@ -36,22 +39,19 @@ set :rails_server, 'unicorn'
 #standard
 set :user, "deployer"
 set :application, "yourapp"
-set :deploy_to, "/home/#{user}/apps/#{application}"
 
 set :deploy_via, :remote_cache
 set :use_sudo, false
 
 set :scm, "git"
-set :repository, "git@repository"
-set :branch, "develop"
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
 if rails_server.eql?("unicorn")
-  load recipes_dir+"config/recipes/unicorn"
+  load recipes_dir+"/config/recipes/unicorn"
 else
-  load recipes_dir+"config/recipes/thin"
+  load recipes_dir+"/config/recipes/thin"
 end
 
 after 'deploy:update_code', 'deploy:migrate'
