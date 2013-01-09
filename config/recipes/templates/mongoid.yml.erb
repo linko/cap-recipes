@@ -1,12 +1,14 @@
-production:
-  database: <%= fetch(:application) %>
-  host: localhost
-  port: 27017
-  pool_size: 5
-  username: <%= fetch(:user) %>
-  password: <%= mongodb_password %>
-  # slaves:
-  #   - host: slave1.local
-  #     port: 27018
-  #   - host: slave2.local
-  #     port: 27019
+<%= rails_env %>:
+  sessions:
+    default:
+      database: <%= fetch(:application) %>_<%= rails_env %>
+      username: <%= fetch(:user) %>
+      password: <%= mongodb_password %>
+      pool_size: 15
+
+      hosts:
+        - localhost:27017
+      options:
+        skip_version_check: true
+        safe: true
+
