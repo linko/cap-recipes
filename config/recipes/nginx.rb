@@ -18,8 +18,8 @@ namespace :nginx do
   desc "Setup nginx configuration for this application"
   task :setup, roles: :web do
     template "nginx_#{rails_server}.erb", "/tmp/nginx_conf"
-    run "#{sudo} mv /tmp/nginx_conf /etc/nginx/sites-available/#{application}.#{domain}"
-    run "#{sudo} ln -nfs /etc/nginx/sites-available/#{application}.#{domain} /etc/nginx/sites-enabled/#{application}.#{domain}"
+    run "#{sudo} cp /tmp/nginx_conf /etc/nginx/sites-available/#{deploy_env}.#{domain}"
+    run "#{sudo} ln -nfs /etc/nginx/sites-available/#{deploy_env}.#{domain} /etc/nginx/sites-enabled/#{deploy_env}.#{domain}"
     run "#{sudo} rm -f /etc/nginx/sites-enabled/default"
     run "#{sudo} rm -f /etc/nginx/sites-available/default"
     restart
