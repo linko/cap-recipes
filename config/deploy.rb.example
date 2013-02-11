@@ -1,3 +1,5 @@
+# user should have rigths username ALL=(ALL:ALL) NOPASSWD: ALL
+
 require "bundler/capistrano"
 require 'sushi/ssh'
 require 'capistrano_colors'
