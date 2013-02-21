@@ -16,13 +16,13 @@ namespace :unicorn do
   end
   after "deploy:setup", "unicorn:setup"
 
-  %w[start stop restart].each do |command|
-    desc "#{command} unicorn"
-    task command, roles: :app do
-      run "service unicorn_#{application}_#{deploy_env} #{command}"
-    end
-    #after "deploy:#{command}", "unicorn:#{command}"
-  end
+  # %w[start stop restart].each do |command|
+  #   desc "#{command} unicorn"
+  #   task command, roles: :app do
+  #     run "service unicorn_#{application}_#{deploy_env} #{command}"
+  #   end
+  #   #after "deploy:#{command}", "unicorn:#{command}"
+  # end
 
 
 end
