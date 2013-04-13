@@ -24,7 +24,7 @@ load recipes_dir+"/config/recipes/nginx"
 load recipes_dir+"/config/recipes/redis"
 load recipes_dir+"/config/recipes/mysql"
 load recipes_dir+"/config/recipes/mongodb"
-load recipes_dir+"/config/recipes/postgres"
+load recipes_dir+"/config/recipes/postgresql"
 load recipes_dir+"/config/recipes/rbenv"
 #load recipes_dir+"/config/recipes/assets" # turn off when deploy:cold
 #load recipes_dir+"config/recipes/check"
