@@ -31,7 +31,7 @@ load recipes_dir+"/config/recipes/rbenv"
 
 #load recipes_dir+'config/recipes/wordpress'
 
-set :ruby_version, '2.0.0p195'
+set :ruby_version, '2.0.0-p195'
 
 server "0.0.0.0", :web, :app, :db, primary: true
 
@@ -47,7 +47,7 @@ set :deploy_via, :remote_cache
 set :use_sudo, false
 
 set :scm, "git"
-set :repository,  'git@github.com:yourapp.git'
+set :repository, 'git@github.com:your/repository.git'
 
 role :app, domain
 role :web, domain
