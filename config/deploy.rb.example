@@ -47,6 +47,17 @@ set :deploy_via, :remote_cache
 set :use_sudo, false
 
 set :scm, "git"
+set :repository,  'git@github.com:yourapp.git'
+
+role :app, domain
+role :web, domain
+role :db,  domain, primary: true
+
+set :unicorn_user,    -> { user }
+set :unicorn_pid,     -> { "#{shared_path}/pids/unicorn.pid"  }
+set :unicorn_config,  -> { "#{shared_path}/config/unicorn.rb" }
+set :unicorn_log,     -> { "#{shared_path}/log/unicorn.log"   }
+set :unicorn_workers, 1
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
@@ -70,4 +81,14 @@ namespace :deploy do
   task :stop do
     run "if [ -f #{unicorn_pid} ] && [ -e /proc/$(cat #{unicorn_pid}) ]; then kill -QUIT `cat #{unicorn_pid}`; fi"
   end
+end
+
+# Allow run cap deploy without recipes
+namespace :postgres do
+  desc "Symlink the database.yml file into latest release"
+  task :symlink, roles: :app do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  end
+
+  after 'deploy:finalize_update', 'postgres:symlink'
 end
