@@ -31,6 +31,7 @@ load recipes_dir+"/config/recipes/rbenv"
 
 #load recipes_dir+'config/recipes/wordpress'
 
+set :ruby_version, '2.0.0p195'
 
 server "0.0.0.0", :web, :app, :db, primary: true
 
