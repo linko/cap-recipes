@@ -1,10 +1,10 @@
-upstream unicorn_<%= "#{rails_env}_#{application}" %> {
+upstream unicorn_<%= "#{stage}_#{application}" %> {
   server unix:<%= "#{deploy_to}/shared/unicorn.sock" %> fail_timeout=0;
 }
 
 server {
   listen 80;
-  server_name <%= "#{application}.#{domain}"%>;
+  server_name <%= "#{stage}.#{domain_name}"%>;
   root <%= current_path %>/public;
 
   location ^~ /assets/ {
@@ -18,7 +18,7 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_redirect off;
-    proxy_pass http://unicorn_<%= "#{rails_env}_#{application}" %>;
+    proxy_pass http://unicorn_<%= "#{stage}_#{application}" %>;
   }
 
   error_page 500 502 503 504 /500.html;

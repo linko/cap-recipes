@@ -4,7 +4,7 @@ set_default(:db_host, "localhost")
 set_default(:db_user) { application }
 set_default(:db_pass) { Capistrano::CLI.password_prompt "! MySQL database password: " }
 set_default(:db_admin_pass) { Capistrano::CLI.password_prompt "! MySQL root password: " }
-set_default(:db_name) { "#{application}_#{deploy_env}"}
+set_default(:db_name) { "#{application}_#{stage}"}
 
 #Capistrano::Configuration.instance.load do
   namespace :db do
@@ -109,7 +109,7 @@ set_default(:db_name) { "#{application}_#{deploy_env}"}
     desc "|DarkRecipes| Create database.yml in shared path with settings for current stage and test env"
     task :create_yaml do
       set(:db_user) { application }
-      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{deploy_env} database password:" }
+      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} database password:" }
 
       db_config = ERB.new <<-EOF
       base: &base
@@ -118,8 +118,8 @@ set_default(:db_name) { "#{application}_#{deploy_env}"}
         username: #{db_user}
         password: #{db_pass}
 
-      #{deploy_env}:
-        database: #{application}_#{deploy_env}
+      #{rails_env}:
+        database: #{application}_#{stage}
         <<: *base
 
       test:
@@ -134,10 +134,10 @@ set_default(:db_name) { "#{application}_#{deploy_env}"}
 
 
   def prepare_for_db_command
-    set :db_name, "#{application}_#{deploy_env}"
+    set :db_name, "#{application}_#{stage}"
     set(:db_admin_user) { Capistrano::CLI.ui.ask "Username with priviledged database access (to create db):" }
     set(:db_user) { application }
-    set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{deploy_env} database password:" }
+    set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} database password:" }
   end
 
   desc "Populates the database with seed data"

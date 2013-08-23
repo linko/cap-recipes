@@ -15,6 +15,7 @@ require 'capistrano/ext/multistage'
 #set :whenever_identifier, defer { "#{application}_#{stage}" }
 #require "whenever/capistrano"
 
+set :domain_name, 'domain.com'
 set :recipes_dir, File.expand_path("/../cap-recipes", __FILE__)
 
 

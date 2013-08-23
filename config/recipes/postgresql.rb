@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
 set_default(:postgresql_host, "localhost")
-set_default(:postgresql_user)     { "#{user}_#{rails_env}" }
+set_default(:postgresql_user)     { "#{user}_#{stage}" }
 set_default(:postgresql_password) { Capistrano::CLI.password_prompt "PostgreSQL Password: " }
-set_default(:postgresql_database) { "#{application}_#{rails_env}_db" }
+set_default(:postgresql_database) { "#{application}_#{stage}_db" }
 
 namespace :postgresql do
   desc "install the latest stable release of PostgreSQL."

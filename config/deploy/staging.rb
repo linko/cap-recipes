@@ -1,5 +1,3 @@
-set :rails_env,   "staging"
-set :deploy_env,  'staging'
-
-set :branch,      'master'
-set :deploy_to,   -> { "/home/#{user}/apps/staging.#{domain}" }
+set :rails_env,   'staging'
+set :branch,      'staging'
+set :deploy_to,   -> { "/home/#{user}/apps/#{stage}.#{domain_name}" }
