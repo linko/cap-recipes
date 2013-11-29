@@ -1,5 +1,5 @@
 upstream unicorn_<%= "#{stage}_#{application}" %> {
-  server unix:<%= "#{deploy_to}/shared/unicorn.sock" %> fail_timeout=0;
+  server unix:<%= "#{deploy_to}/unicorn.sock" %> fail_timeout=0;
 }
 
 server {

@@ -3,16 +3,16 @@
 # you can either use Capistrano to restart the MongoDB server with `cap mongodb:restart`
 # or on the server through SSH with `service mongodb restart`.
 
-set_default(:mongodb_password) { Capistrano::CLI.password_prompt "MongoDB Password: " }
+set_default(:mongodb_password) { Capistrano::CLI.password_prompt 'MongoDB Password: ' }
 
 namespace :mongodb do
   #after "deploy:install", "mongodb:install"
-  desc "Install the latest stable release of Redis."
+  desc 'Install the latest stable release of Redis.'
   task :install, roles: :db, only: {primary: true} do
     run "#{sudo} add-apt-repository 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen'", :pty => true do |ch, stream, data|
       if data =~ /Press.\[ENTER\].to.continue/
         #prompt, and then send the response to the remote process
-        ch.send_data(Capistrano::CLI.password_prompt("Press [ENTER] to continue") + "\n")
+        ch.send_data(Capistrano::CLI.password_prompt('Press [ENTER] to continue') + "\n")
       else
         #use the default handler for all other text
         Capistrano::Configuration.default_io_proc.call(ch,stream,data)
@@ -23,15 +23,15 @@ namespace :mongodb do
     run "#{sudo} apt-get -y install mongodb-10gen"
   end
 
-  after "deploy:setup", "mongodb:setup"
-  desc "Generate the mongoid.yml configuration file."
+  after 'deploy:setup', 'mongodb:setup'
+  desc 'Generate the mongoid.yml configuration file.'
   task :setup, roles: :app do
     run "mkdir -p #{shared_path}/config"
-    template "mongoid.yml.erb", "#{shared_path}/config/mongoid.yml"
+    template 'mongoid.yml.erb', "#{shared_path}/config/mongoid.yml"
   end
 
-  after "deploy:finalize_update", "mongodb:symlink"
-  desc "Symlink the mongoid.yml file into latest release"
+  after 'deploy:finalize_update', 'mongodb:symlink'
+  desc 'Symlink the mongoid.yml file into latest release'
   task :symlink, roles: :app do
     run "ln -nfs #{shared_path}/config/mongoid.yml #{release_path}/config/mongoid.yml"
   end

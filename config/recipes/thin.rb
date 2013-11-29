@@ -1,12 +1,12 @@
 namespace :thin do
 
-  desc "Add thin to autoload"
+  desc 'Add thin to autoload'
   task :install do
     run "#{sudo} /usr/sbin/update-rc.d -f thin defaults"
   end
-  after "deploy:install", "thin:install"
+  after 'deploy:install', 'thin:install'
 
-  desc "Setup Thin initializer and app configuration"
+  desc 'Setup Thin initializer and app configuration'
   task :setup do
     run "#{sudo} thin config -C #{deploy_to}/shared/config/thin_#{application}.yml -c #{deploy_to}/current  --servers 3 -e production"
     run "#{sudo} ln -nfs #{deploy_to}/shared/config/thin_#{application}.yml /etc/thin/#{application}.yml"
@@ -15,7 +15,7 @@ namespace :thin do
     #run "#{sudo} mv /tmp/nginx_conf /etc/nginx/sites-available/#{application}.#{domain}"
     #run "#{sudo} ln -nfs /etc/nginx/sites-available/#{application}.#{domain} /etc/nginx/sites-enabled/#{application}.#{domain}"
   end
-  after "deploy:setup", "thin:setup"
+  after 'deploy:setup', 'thin:setup'
 end
 
 #namespace :deploy do

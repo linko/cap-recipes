@@ -2,4 +2,11 @@ group :tools do
   gem 'capistrano', '~> 2.0'
   gem 'capistrano_colors'
   gem 'sushi'
+  gem 'recap', '~> 1.2'
+  gem 'capistrano-unicorn', require: false
+end
+
+
+group :production do
+  gem 'unicorn'
 end

@@ -1,1 +1,3 @@
 .idea
+config/unicorn.rb
+.recap-lock
