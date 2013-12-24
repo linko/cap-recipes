@@ -2,6 +2,7 @@ require 'erb'
 
 set_default(:db_host, 'localhost')
 set_default(:db_user) { application }
+set_default(:mysql_root_password) { Capistrano::CLI.password_prompt 'Please, create MySQL Root password:' }
 set_default(:db_pass) { Capistrano::CLI.password_prompt '! MySQL database password: ' }
 set_default(:db_admin_pass) { Capistrano::CLI.password_prompt '! MySQL root password: ' }
 set_default(:db_name) { "#{application}_#{stage}_db"}
@@ -15,12 +16,12 @@ set_default(:db_name) { "#{application}_#{stage}_db"}
         run "#{sudo} apt-get -y update"
         run "#{sudo} apt-get -y install mysql-server" do |channel, stream, data|
           # prompts for mysql root password (when blue screen appears)
-          #channel.send_data("#{mysql_root_password}\n\r") if data =~ /password/
-          channel.send_data(Capistrano::CLI.password_prompt('Please, enter mysql root password:') + "\n") if data =~ /password/
+          channel.send_data("#{mysql_root_password}\n\r") if data =~ /password/
+          #channel.send_data(Capistrano::CLI.password_prompt('Please, enter mysql root password:') + "\n") if data =~ /password/
         end
         run "#{sudo} apt-get -y install mysql-client libmysqlclient-dev"
       end
-      #after "deploy:install", "db:mysql:install"
+      after 'deploy:install', 'db:mysql:install'
 
 
       desc 'Create a database and user for this application.'
