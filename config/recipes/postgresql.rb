@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 set_default(:postgresql_host, 'localhost')
-set_default(:postgresql_user)     { "#{user}_#{stage}" }
+set_default(:postgresql_user)     { "#{application}_#{stage}" }
 set_default(:postgresql_password) { Capistrano::CLI.password_prompt 'PostgreSQL Password: ' }
 set_default(:postgresql_database) { "#{application}_#{stage}_db" }
 

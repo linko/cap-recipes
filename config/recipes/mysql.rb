@@ -4,7 +4,7 @@ set_default(:db_host, 'localhost')
 set_default(:db_user) { application }
 set_default(:db_pass) { Capistrano::CLI.password_prompt '! MySQL database password: ' }
 set_default(:db_admin_pass) { Capistrano::CLI.password_prompt '! MySQL root password: ' }
-set_default(:db_name) { "#{application}_#{stage}"}
+set_default(:db_name) { "#{application}_#{stage}_db"}
 
 #Capistrano::Configuration.instance.load do
   namespace :db do
@@ -60,23 +60,23 @@ set_default(:db_name) { "#{application}_#{stage}"}
         download db_remote_file, db_local_file, :via => :scp
       end
 
-      desc '|DarkRecipes| Create MySQL database and user for this environment using prompted values'
-      task :setup, :roles => :db, :only => { :primary => true } do
-        prepare_for_db_command
-
-        sql = <<-SQL
-        CREATE DATABASE #{db_name};
-        GRANT ALL PRIVILEGES ON #{db_name}.* TO #{db_user}@localhost IDENTIFIED BY '#{db_pass}';
-        SQL
-
-        run "mysql --user=#{db_admin_user} -p --execute=\"#{sql}\"" do |channel, stream, data|
-          if data =~ /^Enter password:/
-            pass = Capistrano::CLI.password_prompt "Enter database password for '#{db_admin_user}':"
-            channel.send_data "#{pass}\n"
-          end
-        end
-      end
-      after 'deploy:setup', 'db:mysql:setup'
+      #desc '|DarkRecipes| Create MySQL database and user for this environment using prompted values'
+      #task :setup, :roles => :db, :only => { :primary => true } do
+      #  prepare_for_db_command
+      #
+      #  sql = <<-SQL
+      #  CREATE DATABASE #{db_name};
+      #  GRANT ALL PRIVILEGES ON #{db_name}.* TO #{db_user}@localhost IDENTIFIED BY '#{db_pass}';
+      #  SQL
+      #
+      #  run "mysql --user=#{db_admin_user} -p --execute=\"#{sql}\"" do |channel, stream, data|
+      #    if data =~ /^Enter password:/
+      #      pass = Capistrano::CLI.password_prompt "Enter database password for '#{db_admin_user}':"
+      #      channel.send_data "#{pass}\n"
+      #    end
+      #  end
+      #end
+      #after 'deploy:setup', 'db:mysql:setup'
 
       # Sets database variables from remote database.yaml
       def prepare_from_yaml
@@ -146,7 +146,7 @@ set_default(:db_name) { "#{application}_#{stage}"}
     run "cd #{current_path}; rake RAILS_ENV=#{variables[:rails_env]} db:seed"
   end
 
-  after 'deploy:setup' do
+  after 'db:mysql:create_database' do
     db.create_yaml if Capistrano::CLI.ui.agree("Create database.yml in app's shared path? [Yn]")
   end
 #end
