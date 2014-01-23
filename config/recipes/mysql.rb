@@ -110,7 +110,7 @@ set_default(:db_name) { "#{application}_#{stage}_db"}
     desc '|DarkRecipes| Create database.yml in shared path with settings for current stage and test env'
     task :create_yaml do
       set(:db_user) { application }
-      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} database password:" }
+      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} stage database password:" }
 
       db_config = ERB.new <<-EOF
 #{rails_env}:
