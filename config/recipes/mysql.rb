@@ -113,20 +113,13 @@ set_default(:db_name) { "#{application}_#{stage}_db"}
       set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} database password:" }
 
       db_config = ERB.new <<-EOF
-      base: &base
-        adapter: mysql2
-        encoding: utf8
-        username: #{db_user}
-        password: #{db_pass}
-
-      #{rails_env}:
-        database: #{application}_#{stage}
-        <<: *base
-
-      test:
-        database: #{application}_test
-        <<: *base
-      EOF
+#{rails_env}:
+  adapter: mysql2
+  encoding: utf8
+  username: #{db_user}
+  password: #{db_pass}
+  database: #{db_name}
+EOF
 
       put db_config.result, "#{shared_path}/config/database.yml"
     end
