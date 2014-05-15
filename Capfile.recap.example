@@ -2,6 +2,10 @@ require 'recap/recipes/rails'
 require 'sushi/ssh'
 require 'capistrano_colors'
 require 'capistrano-unicorn'
+require 'capistrano/sidekiq'
+
+set(:sidekiq_cmd) { "#{fetch(:bundle_cmd, "bundle")} exec sidekiq -C config/sidekiq.yml" }
+set(:sidekiq_pid) { File.join(deploy_to, 'tmp', 'pids', 'sidekiq.pid') }
 
 server '192.241.237.16', :web, :app, :db, primary: true
 
