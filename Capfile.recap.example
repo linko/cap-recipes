@@ -3,12 +3,12 @@ require 'sushi/ssh'
 require 'capistrano_colors'
 require 'capistrano-unicorn'
 
-server '192.241.237.16', :web, :app, :db, primary: true
+server '8.8.8.8', :web, :app, :db, primary: true
 
-set :domain_name,     'noteworthylending.com'
-set :ruby_version,    '2.0.0-p353'
-set :application,     'noteworthy'
-set :repository,      'git@github.com:hndsm/direct_lending.git'
+set :domain_name,     'google.com'
+set :ruby_version,    '2.1.1'
+set :application,     'google'
+set :repository,      'git@github.com:google/mail.git'
 set(:user)            { application }
 
 #== Multistage
@@ -18,8 +18,12 @@ require 'capistrano/ext/multistage'
 
 
 #== Recipes
-
 set :recipes_dir, File.expand_path('/cap-recipes', __FILE__)
+load recipes_dir + '/config/recipes/base'
+load recipes_dir + '/config/recipes/nginx'
+load recipes_dir + '/config/recipes/postgresql'
+load recipes_dir + '/config/recipes/rbenv'
+load recipes_dir + '/config/recipes/unicorn'
 
 #== Fallback vars for old recipes
 set(:current_path) { deploy_to }
@@ -31,12 +35,6 @@ set :unicorn_pid,     -> { "#{shared_path}/tmp/pids/unicorn.pid"  }
 set :unicorn_config,  -> { "#{shared_path}/config/unicorn.rb" }
 set :unicorn_log,     -> { "#{shared_path}/log/unicorn.log"   }
 set :unicorn_workers, 1
-
-load recipes_dir+'/config/recipes/base'
-load recipes_dir+'/config/recipes/nginx'
-load recipes_dir+'/config/recipes/postgresql'
-load recipes_dir+'/config/recipes/rbenv'
-load recipes_dir+'/config/recipes/unicorn'
 
 #after 'deploy:restart', 'unicorn:reload'    # app IS NOT preloaded
 after 'deploy:restart', 'unicorn:restart'   # app preloaded

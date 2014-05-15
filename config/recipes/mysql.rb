@@ -14,10 +14,9 @@ set_default(:db_name) { "#{application}_#{stage}_db"}
       task :install, roles: :db, only: {primary: true} do
         #run "echo #{mysql_password}"
         run "#{sudo} apt-get -y update"
+
         run "#{sudo} apt-get -y install mysql-server" do |channel, stream, data|
-          # prompts for mysql root password (when blue screen appears)
-          channel.send_data("#{mysql_root_password}\n\r") if data =~ /password/
-          #channel.send_data(Capistrano::CLI.password_prompt('Please, enter mysql root password:') + "\n") if data =~ /password/
+          channel.send_data("#{mysql_root_password}" + "\r\n") if data =~ /password/
         end
         run "#{sudo} apt-get -y install mysql-client libmysqlclient-dev"
       end
