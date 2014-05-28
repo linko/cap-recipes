@@ -1,6 +1,6 @@
 deploy_to   = "<%= deploy_to %>"
 rails_root  = deploy_to
-pid_file    = deploy_to + "/pids/unicorn.pid"
+pid_file    = deploy_to + "/tmp/pids/unicorn.pid"
 socket_file = deploy_to + "/unicorn.sock"
 log_file    = "#{rails_root }/log/unicorn.log"
 err_log     = "#{rails_root }/log/unicorn_error.log"

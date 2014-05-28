@@ -4,6 +4,7 @@ group :tools do
   gem 'sushi'
   gem 'recap', '~> 1.2'
   gem 'capistrano-unicorn', require: false
+  gem 'capistrano-sidekiq'
 end
 
 

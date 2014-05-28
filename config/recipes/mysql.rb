@@ -14,10 +14,9 @@ set_default(:db_name) { "#{application}_#{stage}_db"}
       task :install, roles: :db, only: {primary: true} do
         #run "echo #{mysql_password}"
         run "#{sudo} apt-get -y update"
+
         run "#{sudo} apt-get -y install mysql-server" do |channel, stream, data|
-          # prompts for mysql root password (when blue screen appears)
-          channel.send_data("#{mysql_root_password}\n\r") if data =~ /password/
-          #channel.send_data(Capistrano::CLI.password_prompt('Please, enter mysql root password:') + "\n") if data =~ /password/
+          channel.send_data("#{mysql_root_password}" + "\r\n") if data =~ /password/
         end
         run "#{sudo} apt-get -y install mysql-client libmysqlclient-dev"
       end
@@ -110,16 +109,16 @@ set_default(:db_name) { "#{application}_#{stage}_db"}
     desc '|DarkRecipes| Create database.yml in shared path with settings for current stage and test env'
     task :create_yaml do
       set(:db_user) { application }
-      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} database password:" }
+      set(:db_pass) { Capistrano::CLI.password_prompt "Enter #{stage} stage database password:" }
 
       db_config = ERB.new <<-EOF
-    #{rails_env}: &base
-      adapter: mysql2
-      encoding: utf8
-      username: #{db_user}
-      password: #{db_pass}
-      database: #{db_name}
-  EOF
+#{rails_env}:
+  adapter: mysql2
+  encoding: utf8
+  username: #{db_user}
+  password: #{db_pass}
+  database: #{db_name}
+EOF
 
       put db_config.result, "#{shared_path}/config/database.yml"
     end

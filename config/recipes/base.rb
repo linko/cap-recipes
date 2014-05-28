@@ -17,6 +17,7 @@ namespace :deploy do
   task :install do
     run "#{sudo} apt-get -y update"
     run "#{sudo} apt-get -y install python-software-properties"
+    run "#{sudo} apt-get -y install nodejs"
 
     run "#{sudo} apt-add-repository ppa:blueyed/ppa",:pty => true do |ch, stream, data|
       if data =~ /Press.\[ENTER\].to.continue/
