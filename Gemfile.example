@@ -5,6 +5,8 @@ group :tools do
   gem 'recap', '~> 1.2'
   gem 'capistrano-unicorn', require: false
   gem 'capistrano-sidekiq'
+  gem 'bundler-audit'
+  gem 'capistrano-colorized-stream'
 end
 
 

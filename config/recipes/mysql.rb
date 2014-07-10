@@ -1,7 +1,7 @@
 require 'erb'
 
 set_default(:db_host, 'localhost')
-set_default(:db_user) { application }
+set_default(:db_user) { "#{application}_#{stage}" }
 set_default(:mysql_root_password) { Capistrano::CLI.password_prompt 'Please, create MySQL Root password:' }
 set_default(:db_pass) { Capistrano::CLI.password_prompt '! MySQL database password: ' }
 set_default(:db_admin_pass) { Capistrano::CLI.password_prompt '! MySQL root password: ' }
