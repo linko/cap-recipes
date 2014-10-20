@@ -3,6 +3,7 @@ require 'sushi/ssh'
 require 'capistrano_colors'
 require 'capistrano-unicorn'
 require 'capistrano/sidekiq'
+require 'capistrano/slack'
 
 set(:sidekiq_cmd) { "#{fetch(:bundle_cmd, "bundle")} exec sidekiq -C config/sidekiq.yml" }
 set(:sidekiq_pid) { File.join(deploy_to, 'tmp', 'pids', 'sidekiq.pid') }
@@ -43,3 +44,12 @@ set :unicorn_workers, 1
 #after 'deploy:restart', 'unicorn:reload'    # app IS NOT preloaded
 after 'deploy:restart', 'unicorn:restart'   # app preloaded
 #after 'deploy:restart', 'unicorn:duplicate' # before_fork hook implemented (zero downtime deployments)
+
+# required
+set :slack_token, 'RBPcKQ6aIUCrJn2XrBBfn94o' # comes from inbound webhook integration
+set :slack_room, '#thanks'
+set :slack_subdomain, 'hndsm'
+
+set :slack_application, ''
+set :slack_username, 'CapBot'
+set :slack_emoji, ':rocket:'
