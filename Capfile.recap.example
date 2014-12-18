@@ -42,13 +42,13 @@ set :unicorn_log,     -> { "#{shared_path}/log/unicorn.log"   }
 set :unicorn_workers, 1
 
 #after 'deploy:restart', 'unicorn:reload'    # app IS NOT preloaded
-after 'deploy:restart', 'unicorn:restart'   # app preloaded
-#after 'deploy:restart', 'unicorn:duplicate' # before_fork hook implemented (zero downtime deployments)
+#after 'deploy:restart', 'unicorn:restart'   # app preloaded
+after 'deploy:restart', 'unicorn:duplicate' # before_fork hook implemented (zero downtime deployments)
 
 # required
-set :slack_token, 'RBPcKQ6aIUCrJn2XrBBfn94o' # comes from inbound webhook integration
-set :slack_room, '#thanks'
-set :slack_subdomain, 'hndsm'
+set :slack_token, '' # comes from inbound webhook integration
+set :slack_room, ''
+set :slack_subdomain, ''
 
 set :slack_application, ''
 set :slack_username, 'CapBot'

@@ -45,7 +45,7 @@ set_default(:db_name) { "#{application}_#{stage}_db"}
         end
       end
 
-      desc '|DarkRecipes| Restores the database from the latest compressed dump'
+      desc 'Restores the database from the latest compressed dump'
       task :restore, :roles => :db, :only => { :primary => true } do
         prepare_from_yaml
         run "bzcat #{db_remote_file} | mysql --user=#{db_user} -p --host=#{db_host} #{db_name}" do |ch, stream, out|
@@ -54,29 +54,11 @@ set_default(:db_name) { "#{application}_#{stage}_db"}
         end
       end
 
-      desc '|DarkRecipes| Downloads the compressed database dump to this machine'
+      desc 'Downloads the compressed database dump to this machine'
       task :fetch_dump, :roles => :db, :only => { :primary => true } do
         prepare_from_yaml
         download db_remote_file, db_local_file, :via => :scp
       end
-
-      #desc '|DarkRecipes| Create MySQL database and user for this environment using prompted values'
-      #task :setup, :roles => :db, :only => { :primary => true } do
-      #  prepare_for_db_command
-      #
-      #  sql = <<-SQL
-      #  CREATE DATABASE #{db_name};
-      #  GRANT ALL PRIVILEGES ON #{db_name}.* TO #{db_user}@localhost IDENTIFIED BY '#{db_pass}';
-      #  SQL
-      #
-      #  run "mysql --user=#{db_admin_user} -p --execute=\"#{sql}\"" do |channel, stream, data|
-      #    if data =~ /^Enter password:/
-      #      pass = Capistrano::CLI.password_prompt "Enter database password for '#{db_admin_user}':"
-      #      channel.send_data "#{pass}\n"
-      #    end
-      #  end
-      #end
-      #after 'deploy:setup', 'db:mysql:setup'
 
       # Sets database variables from remote database.yaml
       def prepare_from_yaml

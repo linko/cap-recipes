@@ -7,7 +7,7 @@ group :tools do
   gem 'capistrano-sidekiq'
   gem 'bundler-audit'
   gem 'capistrano-colorized-stream'
-  gem 'capistrano-slack', github: 'j-mcnally/capistrano-slack'
+  gem 'capistrano-slack', '1.3.1'
 end
 
 
