@@ -1,5 +1,16 @@
+# Install recipes for quick server setup
 
-### Install recipes
+### Serverside
+Add new user
+```bash
+useradd -m [username] -s /bin/bash
+```
+Grant access rights to new user: run visudo and add:
+```
+username ALL=(ALL:ALL) NOPASSWD: ALL
+```
+
+### Locally in your app
 ```bash
 git submodule add git@github.com:linko/cap-recipes.git
 cd cap-recipes && git checkout recap
