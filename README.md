@@ -1,11 +1,13 @@
 # Install recipes for quick server setup
 
 ## Serverside
+Assuming you have root priveligies:
 ###Add new user
 ```bash
 useradd -m [username] -s /bin/bash
 ```
-###Grant access rights to new user: run `visudo` and add:
+###Grant access rights to new user 
+Run `visudo` and add:
 ```
 username ALL=(ALL:ALL) NOPASSWD: ALL
 ```
