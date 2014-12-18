@@ -36,8 +36,8 @@ Copy everything from Gemfile.example to your Gemfile and run `bundle install`
 ### Setup instructions
 
 ```bash
-cap deploy:install
-cap bootstrap
-cap deploy:setup
-cap deploy
+bundle exec cap deploy:install
+bundle exec cap bootstrap
+bundle exec cap deploy:setup
+bundle exec cap deploy
 ```
