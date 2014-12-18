@@ -1,4 +1,5 @@
 # Install recipes for quick server setup
+This bunch of recipes is aimed to help you with automatical server setup. No handjob required.
 
 ## Serverside
 Assuming you have root priveligies:
@@ -32,6 +33,14 @@ mkdir config/deploy
 cp cap-recipes/config/deploy/* ./config/deploy/
 ```
 
+### Update your .gitignore
+Add here
+```
+config/unicorn.rb
+.recap-lock
+/cap-recipes
+```
+
 ### Update Gemfile
 Copy everything from Gemfile.example to your Gemfile and run `bundle install`
 
@@ -41,5 +50,20 @@ Copy everything from Gemfile.example to your Gemfile and run `bundle install`
 bundle exec cap deploy:install
 bundle exec cap bootstrap
 bundle exec cap deploy:setup
+```
+
+### Comment recipes loading
+Open Capfile and comment part with recipes loading
+```ruby
+set :recipes_dir, File.expand_path('/cap-recipes', __FILE__)
+load recipes_dir + '/config/recipes/base'
+load recipes_dir + '/config/recipes/nginx'
+load recipes_dir + '/config/recipes/postgresql'
+load recipes_dir + '/config/recipes/rbenv'
+load recipes_dir + '/config/recipes/unicorn'
+```
+### Final deploy
+
+```bash
 bundle exec cap deploy
 ```
