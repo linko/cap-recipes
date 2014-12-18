@@ -13,7 +13,7 @@ username ALL=(ALL:ALL) NOPASSWD: ALL
 Add remote repo keys to users .ssh/known_hosts to avoid requests while running cap procedures
 Git:
 ```bash
-ssh git@github.com
+cap system_user:copy_ssh_keys
 ```
 
 ## Locally in your app
