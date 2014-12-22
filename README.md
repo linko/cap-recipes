@@ -44,6 +44,15 @@ config/unicorn.rb
 ### Update Gemfile
 Copy everything from Gemfile.example to your Gemfile and run `bundle install`
 
+### Check needed recipes to be included
+Verify you'd included correct recipes for your application (i.e. mysql recipe for application on postgres) in `Capfile`. For example:
+```ruby
+set :recipes_dir, File.expand_path('/cap-recipes', __FILE__)
+load recipes_dir + '/config/recipes/base'
+load recipes_dir + '/config/recipes/nginx'
+load recipes_dir + '/config/recipes/unicorn'
+```
+
 ### Setup instructions
 
 ```bash
