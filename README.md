@@ -76,6 +76,12 @@ load recipes_dir + '/config/recipes/unicorn'
 ```bash
 bundle exec cap deploy
 ```
-## 3) Known issues
+
+## 3) Rolling back
+```bash
+bundle exec cap deploy:rollback
+```
+
+## 4) Known issues
 - MySQL limitation to 16 symbols username can cause a problem in `mysql` recipe. To avoid this edit line
 `set_default(:db_user) { "#{application}_production" }` to get in this limit.
