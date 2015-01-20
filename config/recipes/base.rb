@@ -20,7 +20,7 @@ namespace :deploy do
     run "#{sudo} apt-get -y install nodejs"
     run "#{sudo} apt-get -y install libcurl3-dev"
     run "#{sudo} apt-get -y install imagemagick"
-
+    run "#{sudo} apt-get -y install libffi-dev"
 
     run "#{sudo} apt-add-repository ppa:blueyed/ppa",:pty => true do |ch, stream, data|
       if data =~ /Press.\[ENTER\].to.continue/

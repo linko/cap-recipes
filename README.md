@@ -1,7 +1,7 @@
 # Install recipes for quick server setup
 This bunch of recipes is aimed to help you with automatical server setup. No handjob required.
 
-## Serverside
+## 1) Serverside
 Assuming you have root priveligies:
 ###Add new user
 ```bash
@@ -19,7 +19,7 @@ Git:
 cap system_user:copy_ssh_keys
 ```
 
-## Locally in your app
+## 2) Clientside
 ### Add recipes
 ```bash
 git submodule add git@github.com:linko/cap-recipes.git
@@ -44,6 +44,15 @@ config/unicorn.rb
 ### Update Gemfile
 Copy everything from Gemfile.example to your Gemfile and run `bundle install`
 
+### Check needed recipes to be included
+Verify you'd included correct recipes for your application (i.e. mysql recipe for application on postgres) in `Capfile`. For example:
+```ruby
+set :recipes_dir, File.expand_path('/cap-recipes', __FILE__)
+load recipes_dir + '/config/recipes/base'
+load recipes_dir + '/config/recipes/nginx'
+load recipes_dir + '/config/recipes/unicorn'
+```
+
 ### Setup instructions
 
 ```bash
@@ -67,3 +76,12 @@ load recipes_dir + '/config/recipes/unicorn'
 ```bash
 bundle exec cap deploy
 ```
+
+## 3) Rolling back
+```bash
+bundle exec cap deploy:rollback
+```
+
+## 4) Known issues
+- MySQL limitation to 16 symbols username can cause a problem in `mysql` recipe. To avoid this edit line
+`set_default(:db_user) { "#{application}_production" }` to get in this limit.
