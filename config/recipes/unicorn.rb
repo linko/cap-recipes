@@ -13,6 +13,7 @@ namespace :unicorn do
     run 'chmod +x /tmp/unicorn_init'
     run "#{sudo} cp /tmp/unicorn_init /etc/init.d/unicorn_#{application}_#{stage}"
     run "#{sudo} update-rc.d -f unicorn_#{application}_#{stage} defaults"
+    run "touch #{shared_path}/tmp/pids/unicorn.pid"
   end
   after 'deploy:setup', 'unicorn:setup'
 
