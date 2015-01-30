@@ -8,7 +8,7 @@ namespace :redis do
   desc 'Install the latest stable release of Redis.'
   task :install, roles: :db, only: {primary: true} do
 
-    run "#{sudo} add-apt-repository ppa:rwky/redis",:pty => true do |ch, stream, data|
+    run "#{sudo} add-apt-repository ppa:chris-lea/redis-server",:pty => true do |ch, stream, data|
       if data =~ /Press.\[ENTER\].to.continue/
         #prompt, and then send the response to the remote process
         ch.send_data(Capistrano::CLI.password_prompt('Press [ENTER] to continue') + "\n")
